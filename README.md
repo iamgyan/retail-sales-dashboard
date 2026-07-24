@@ -34,13 +34,14 @@ retail-sales-dashboard/
 - [x] Feature Engineering
 - [x] PostgreSQL Integration
 - [x] Basic SQL Queries
-- [ ] Advanced SQL
-- [ ] Dashboard
-- [ ] Business Insights
+- [x] Advanced SQL
+- [x] Dashboard
+- [x] Business Insights
 
 ## Dataset
 
 Sample Superstore Dataset
+https://www.kaggle.com/datasets/vivek468/superstore-dataset-final
 
 ## Author
 
