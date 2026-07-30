@@ -300,3 +300,388 @@ FROM sales
 GROUP BY Sales_Category
 
 ORDER BY Total_Sales DESC;
+---------------------------------------------------------
+-- 17. Discount Status
+---------------------------------------------------------
+
+SELECT
+    "Order ID",
+    "Discount",
+
+    CASE
+        WHEN "Discount" = 0 THEN 'No Discount'
+        WHEN "Discount" < 0.20 THEN 'Low'
+        WHEN "Discount" < 0.50 THEN 'Medium'
+        ELSE 'Heavy'
+    END AS Discount_Status
+
+FROM sales;
+
+---------------------------------------------------------
+-- 18. Quantity Category
+---------------------------------------------------------
+
+SELECT
+    "Order ID",
+    "Quantity",
+
+    CASE
+        WHEN "Quantity" = 1 THEN 'Single Item'
+        WHEN "Quantity" BETWEEN 2 AND 4 THEN 'Small Order'
+        ELSE 'Bulk Order'
+    END AS Quantity_Type
+
+FROM sales;
+
+---------------------------------------------------------
+-- 19. Shipping Speed Flag
+---------------------------------------------------------
+
+SELECT
+    "Order ID",
+    "Ship Mode",
+
+    CASE
+        WHEN "Ship Mode" = 'Same Day' THEN 'Fastest'
+        WHEN "Ship Mode" = 'First Class' THEN 'Fast'
+        WHEN "Ship Mode" = 'Second Class' THEN 'Normal'
+        ELSE 'Economy'
+    END AS Shipping_Class
+
+FROM sales;
+
+---------------------------------------------------------
+-- 20. Sales Above Average
+---------------------------------------------------------
+
+SELECT
+    "Order ID",
+    "Sales",
+
+    CASE
+        WHEN "Sales" >
+        (SELECT AVG("Sales") FROM sales)
+        THEN 'Above Average'
+
+        ELSE 'Below Average'
+    END AS Sales_Level
+
+FROM sales;
+
+---------------------------------------------------------
+-- 21. Profit Above Average
+---------------------------------------------------------
+
+SELECT
+    "Order ID",
+    "Profit",
+
+    CASE
+        WHEN "Profit" >
+        (SELECT AVG("Profit") FROM sales)
+        THEN 'Above Average'
+
+        ELSE 'Below Average'
+    END AS Profit_Level
+
+FROM sales;
+
+---------------------------------------------------------
+-- 22. Loss Percentage by Region
+---------------------------------------------------------
+
+SELECT
+
+"Region",
+
+COUNT(*) AS Total_Orders,
+
+SUM(
+CASE
+WHEN "Profit" <0 THEN 1
+ELSE 0
+END
+) AS Loss_Orders
+
+FROM sales
+
+GROUP BY "Region";
+
+---------------------------------------------------------
+-- 23. Profitable Orders
+---------------------------------------------------------
+
+SELECT
+
+SUM(
+
+CASE
+WHEN "Profit" >0 THEN 1
+ELSE 0
+END
+
+) AS Profitable_Orders
+
+FROM sales;
+
+---------------------------------------------------------
+-- 24. Total Sales from High Value Orders
+---------------------------------------------------------
+
+SELECT
+
+SUM(
+
+CASE
+
+WHEN "Sales">1000 THEN "Sales"
+
+ELSE 0
+
+END
+
+) AS High_Value_Sales
+
+FROM sales;
+
+---------------------------------------------------------
+-- 25. Average Profit of Loss Making Orders
+---------------------------------------------------------
+
+SELECT
+
+AVG(
+
+CASE
+
+WHEN "Profit"<0 THEN "Profit"
+
+END
+
+)
+
+FROM sales;
+
+---------------------------------------------------------
+-- 26. Customer Spending Level
+---------------------------------------------------------
+
+SELECT
+
+"Customer Name",
+
+SUM("Sales") AS Total_Sales,
+
+CASE
+
+WHEN SUM("Sales")>20000 THEN 'Diamond'
+
+WHEN SUM("Sales")>10000 THEN 'Platinum'
+
+WHEN SUM("Sales")>5000 THEN 'Gold'
+
+ELSE 'Silver'
+
+END AS Customer_Level
+
+FROM sales
+
+GROUP BY "Customer Name";
+
+---------------------------------------------------------
+-- 27. Category Performance
+---------------------------------------------------------
+
+SELECT
+
+"Category",
+
+SUM("Profit") AS Profit,
+
+CASE
+
+WHEN SUM("Profit")>50000 THEN 'Excellent'
+
+WHEN SUM("Profit")>20000 THEN 'Good'
+
+WHEN SUM("Profit")>0 THEN 'Average'
+
+ELSE 'Poor'
+
+END AS Performance
+
+FROM sales
+
+GROUP BY "Category";
+
+---------------------------------------------------------
+-- 28. Office Supplies Profitability
+---------------------------------------------------------
+
+SELECT
+
+"Sub-Category",
+
+SUM("Profit"),
+
+CASE
+
+WHEN SUM("Profit")>10000 THEN 'Star'
+
+WHEN SUM("Profit")>0 THEN 'Normal'
+
+ELSE 'Loss'
+
+END
+
+FROM sales
+
+WHERE "Category"='Office Supplies'
+
+GROUP BY "Sub-Category";
+
+---------------------------------------------------------
+-- 29. Order Season
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+
+"Order Month",
+
+CASE
+
+WHEN "Order Month" IN
+('December','January','February')
+THEN 'Winter'
+
+WHEN "Order Month" IN
+('March','April','May')
+THEN 'Spring'
+
+WHEN "Order Month" IN
+('June','July','August')
+THEN 'Summer'
+
+ELSE 'Autumn'
+
+END AS Season
+
+FROM sales;
+
+---------------------------------------------------------
+-- 30. Shipping Delay Alert
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+
+"Shipping Days",
+
+CASE
+
+WHEN "Shipping Days">7 THEN 'Critical'
+
+WHEN "Shipping Days">5 THEN 'Warning'
+
+ELSE 'On Time'
+
+END
+
+FROM sales;
+
+---------------------------------------------------------
+-- 31. High Discount High Profit
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+
+CASE
+
+WHEN "Discount">0.3
+AND "Profit">100
+
+THEN 'Successful Discount'
+
+ELSE 'Normal'
+
+END
+
+FROM sales;
+
+---------------------------------------------------------
+-- 32. Loss due to Heavy Discount
+---------------------------------------------------------
+
+SELECT
+
+COUNT(
+
+CASE
+
+WHEN "Discount">0.3
+AND "Profit"<0
+
+THEN 1
+
+END
+
+)
+
+FROM sales;
+
+---------------------------------------------------------
+-- 33. Profit Ratio
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+
+ROUND(
+("Profit"/NULLIF("Sales",0))*100,
+2
+) AS Profit_Ratio,
+
+CASE
+
+WHEN ("Profit"/NULLIF("Sales",0))*100>20
+THEN 'Excellent'
+
+WHEN ("Profit"/NULLIF("Sales",0))*100>10
+THEN 'Healthy'
+
+ELSE 'Low'
+
+END
+
+FROM sales;
+
+---------------------------------------------------------
+-- 34. Regional Risk
+---------------------------------------------------------
+
+SELECT
+
+"Region",
+
+SUM("Profit") AS Profit,
+
+CASE
+
+WHEN SUM("Profit")<0 THEN 'High Risk'
+
+WHEN SUM("Profit")<50000 THEN 'Medium Risk'
+
+ELSE 'Low Risk'
+
+END
+
+FROM sales
+
+GROUP BY "Region";
+
