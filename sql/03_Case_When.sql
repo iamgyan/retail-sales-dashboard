@@ -684,4 +684,65 @@ END
 FROM sales
 
 GROUP BY "Region";
+---------------------------------------------------------
+-- 35. Business KPI
+---------------------------------------------------------
 
+SELECT
+
+COUNT(*) AS Orders,
+
+SUM(
+CASE
+WHEN "Profit">0 THEN 1
+END
+) AS Profitable,
+
+SUM(
+CASE
+WHEN "Profit"<0 THEN 1
+END
+) AS Loss,
+
+ROUND(
+
+100.0*
+SUM(
+CASE
+WHEN "Profit">0 THEN 1
+END
+)
+/COUNT(*)
+
+,2) AS Success_Rate
+
+FROM sales;
+
+---------------------------------------------------------
+-- 36. Business Recommendation
+---------------------------------------------------------
+
+SELECT
+
+"Sub-Category",
+
+SUM("Sales") AS Sales,
+
+SUM("Profit") AS Profit,
+
+CASE
+
+WHEN SUM("Sales")>50000
+AND SUM("Profit")<0
+THEN 'Increase Margin'
+
+WHEN SUM("Sales")<10000
+THEN 'Increase Marketing'
+
+ELSE 'Maintain'
+
+END AS Recommendation
+
+FROM sales
+
+GROUP BY "Sub-Category";
