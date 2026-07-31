@@ -367,3 +367,331 @@ ORDER BY
 LIMIT 20;
 
 
+/*
+=========================================================
+PART 2 : Aggregate Functions & GROUP BY
+Queries : 31 - 60
+=========================================================
+*/
+
+-------------------------------------------------------------
+-- Query 31
+-- Total Orders
+-------------------------------------------------------------
+
+SELECT COUNT(*) AS Total_Orders
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 32
+-- Total Sales
+-------------------------------------------------------------
+
+SELECT SUM("Sales") AS Total_Sales
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 33
+-- Total Profit
+-------------------------------------------------------------
+
+SELECT SUM("Profit") AS Total_Profit
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 34
+-- Average Sales
+-------------------------------------------------------------
+
+SELECT AVG("Sales") AS Average_Sales
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 35
+-- Average Profit
+-------------------------------------------------------------
+
+SELECT AVG("Profit") AS Average_Profit
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 36
+-- Highest Sale
+-------------------------------------------------------------
+
+SELECT MAX("Sales") AS Highest_Sale
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 37
+-- Lowest Sale
+-------------------------------------------------------------
+
+SELECT MIN("Sales") AS Lowest_Sale
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 38
+-- Highest Profit
+-------------------------------------------------------------
+
+SELECT MAX("Profit") AS Highest_Profit
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 39
+-- Biggest Loss
+-------------------------------------------------------------
+
+SELECT MIN("Profit") AS Biggest_Loss
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 40
+-- Average Discount
+-------------------------------------------------------------
+
+SELECT AVG("Discount") AS Average_Discount
+FROM sales;
+
+-------------------------------------------------------------
+-- Query 41
+-- Orders by Category
+-------------------------------------------------------------
+
+SELECT
+"Category",
+COUNT(*) AS Orders
+FROM sales
+GROUP BY "Category";
+
+-------------------------------------------------------------
+-- Query 42
+-- Sales by Category
+-------------------------------------------------------------
+
+SELECT
+"Category",
+SUM("Sales") AS Total_Sales
+FROM sales
+GROUP BY "Category";
+
+-------------------------------------------------------------
+-- Query 43
+-- Profit by Category
+-------------------------------------------------------------
+
+SELECT
+"Category",
+SUM("Profit") AS Total_Profit
+FROM sales
+GROUP BY "Category";
+
+-------------------------------------------------------------
+-- Query 44
+-- Average Sales by Category
+-------------------------------------------------------------
+
+SELECT
+"Category",
+AVG("Sales") AS Average_Sales
+FROM sales
+GROUP BY "Category";
+
+-------------------------------------------------------------
+-- Query 45
+-- Orders by Region
+-------------------------------------------------------------
+
+SELECT
+"Region",
+COUNT(*) AS Orders
+FROM sales
+GROUP BY "Region";
+
+-------------------------------------------------------------
+-- Query 46
+-- Sales by Region
+-------------------------------------------------------------
+
+SELECT
+"Region",
+SUM("Sales") AS Total_Sales
+FROM sales
+GROUP BY "Region";
+
+-------------------------------------------------------------
+-- Query 47
+-- Profit by Region
+-------------------------------------------------------------
+
+SELECT
+"Region",
+SUM("Profit") AS Total_Profit
+FROM sales
+GROUP BY "Region";
+
+-------------------------------------------------------------
+-- Query 48
+-- Sales by Segment
+-------------------------------------------------------------
+
+SELECT
+"Segment",
+SUM("Sales") AS Total_Sales
+FROM sales
+GROUP BY "Segment";
+
+-------------------------------------------------------------
+-- Query 49
+-- Profit by Segment
+-------------------------------------------------------------
+
+SELECT
+"Segment",
+SUM("Profit") AS Total_Profit
+FROM sales
+GROUP BY "Segment";
+
+-------------------------------------------------------------
+-- Query 50
+-- Sales by Ship Mode
+-------------------------------------------------------------
+
+SELECT
+"Ship Mode",
+SUM("Sales") AS Total_Sales
+FROM sales
+GROUP BY "Ship Mode";
+
+-------------------------------------------------------------
+-- Query 51
+-- Orders by State
+-------------------------------------------------------------
+
+SELECT
+"State",
+COUNT(*) AS Orders
+FROM sales
+GROUP BY "State"
+ORDER BY Orders DESC;
+
+-------------------------------------------------------------
+-- Query 52
+-- Top 10 States by Sales
+-------------------------------------------------------------
+
+SELECT
+"State",
+SUM("Sales") AS Total_Sales
+FROM sales
+GROUP BY "State"
+ORDER BY Total_Sales DESC
+LIMIT 10;
+
+-------------------------------------------------------------
+-- Query 53
+-- Top 10 States by Profit
+-------------------------------------------------------------
+
+SELECT
+"State",
+SUM("Profit") AS Total_Profit
+FROM sales
+GROUP BY "State"
+ORDER BY Total_Profit DESC
+LIMIT 10;
+
+-------------------------------------------------------------
+-- Query 54
+-- Bottom 10 States by Profit
+-------------------------------------------------------------
+
+SELECT
+"State",
+SUM("Profit") AS Total_Profit
+FROM sales
+GROUP BY "State"
+ORDER BY Total_Profit ASC
+LIMIT 10;
+
+-------------------------------------------------------------
+-- Query 55
+-- Categories with Sales > 500000
+-------------------------------------------------------------
+
+SELECT
+"Category",
+SUM("Sales") AS Total_Sales
+FROM sales
+GROUP BY "Category"
+HAVING SUM("Sales") > 500000;
+
+-------------------------------------------------------------
+-- Query 56
+-- Regions with Profit > 100000
+-------------------------------------------------------------
+
+SELECT
+"Region",
+SUM("Profit") AS Total_Profit
+FROM sales
+GROUP BY "Region"
+HAVING SUM("Profit") > 100000;
+
+-------------------------------------------------------------
+-- Query 57
+-- States having more than 200 Orders
+-------------------------------------------------------------
+
+SELECT
+"State",
+COUNT(*) AS Orders
+FROM sales
+GROUP BY "State"
+HAVING COUNT(*) > 200;
+
+-------------------------------------------------------------
+-- Query 58
+-- Ship Modes with Avg Shipping Days > 4
+-------------------------------------------------------------
+
+SELECT
+"Ship Mode",
+AVG("Shipping Days") AS Avg_Days
+FROM sales
+GROUP BY "Ship Mode"
+HAVING AVG("Shipping Days") > 4;
+
+-------------------------------------------------------------
+-- Query 59
+-- Customer Segments having Avg Sales > 250
+-------------------------------------------------------------
+
+SELECT
+"Segment",
+AVG("Sales") AS Avg_Sales
+FROM sales
+GROUP BY "Segment"
+HAVING AVG("Sales") > 250;
+
+-------------------------------------------------------------
+-- Query 60
+-- Business KPI Dashboard
+-------------------------------------------------------------
+
+SELECT
+
+COUNT(*) AS Total_Orders,
+
+SUM("Sales") AS Total_Sales,
+
+SUM("Profit") AS Total_Profit,
+
+ROUND(AVG("Sales"),2) AS Average_Order_Value,
+
+ROUND(AVG("Profit"),2) AS Average_Profit
+
+FROM sales;
+
+
