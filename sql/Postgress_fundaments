@@ -1304,3 +1304,482 @@ MAX("Sales") AS Max_Order,
 MIN("Sales") AS Min_Order
 
 FROM sales;
+
+
+/*
+=========================================================
+PART 4 : STRING, DATE & NUMERIC FUNCTIONS
+Queries : 91 - 130
+=========================================================
+*/
+
+---------------------------------------------------------
+-- Query 91
+-- Convert Customer Name to Uppercase
+---------------------------------------------------------
+
+SELECT
+"Customer Name",
+UPPER("Customer Name") AS Customer_Upper
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 92
+-- Convert Customer Name to Lowercase
+---------------------------------------------------------
+
+SELECT
+"Customer Name",
+LOWER("Customer Name") AS Customer_Lower
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 93
+-- Length of Customer Name
+---------------------------------------------------------
+
+SELECT
+"Customer Name",
+LENGTH("Customer Name") AS Name_Length
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 94
+-- First 5 Characters of Product Name
+---------------------------------------------------------
+
+SELECT
+"Product Name",
+LEFT("Product Name",5) AS Prefix
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 95
+-- Last 8 Characters of Product Name
+---------------------------------------------------------
+
+SELECT
+"Product Name",
+RIGHT("Product Name",8) AS Suffix
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 96
+-- First 10 Characters
+---------------------------------------------------------
+
+SELECT
+"Product Name",
+SUBSTRING("Product Name",1,10)
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 97
+-- Replace Word
+---------------------------------------------------------
+
+SELECT
+"Product Name",
+REPLACE("Product Name",'Chair','Seat')
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 98
+-- Trim Example
+---------------------------------------------------------
+
+SELECT
+TRIM('     PostgreSQL     ') AS Clean_Text;
+
+---------------------------------------------------------
+-- Query 99
+-- Concatenate Customer & State
+---------------------------------------------------------
+
+SELECT
+CONCAT("Customer Name",' - ',"State") AS Customer_State
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 100
+-- Current Date
+---------------------------------------------------------
+
+SELECT CURRENT_DATE;
+
+---------------------------------------------------------
+-- Query 101
+-- Current Time
+---------------------------------------------------------
+
+SELECT CURRENT_TIME;
+
+---------------------------------------------------------
+-- Query 102
+-- Current Timestamp
+---------------------------------------------------------
+
+SELECT CURRENT_TIMESTAMP;
+
+---------------------------------------------------------
+-- Query 103
+-- Extract Year
+---------------------------------------------------------
+
+SELECT
+"Order Date",
+EXTRACT(YEAR FROM "Order Date") AS Order_Year
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 104
+-- Extract Month
+---------------------------------------------------------
+
+SELECT
+"Order Date",
+EXTRACT(MONTH FROM "Order Date") AS Month
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 105
+-- Extract Day
+---------------------------------------------------------
+
+SELECT
+"Order Date",
+EXTRACT(DAY FROM "Order Date") AS Day
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 106
+-- Extract Quarter
+---------------------------------------------------------
+
+SELECT
+"Order Date",
+EXTRACT(QUARTER FROM "Order Date") AS Quarter
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 107
+-- Extract Week
+---------------------------------------------------------
+
+SELECT
+"Order Date",
+EXTRACT(WEEK FROM "Order Date") AS Week_Number
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 108
+-- Date Trunc Month
+---------------------------------------------------------
+
+SELECT
+DATE_TRUNC('month',"Order Date")
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 109
+-- Shipping Difference
+---------------------------------------------------------
+
+SELECT
+"Order Date",
+"Ship Date",
+AGE("Ship Date","Order Date") AS Shipping_Time
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 110
+-- Round Sales
+---------------------------------------------------------
+
+SELECT
+ROUND("Sales",2)
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 111
+-- Ceiling
+---------------------------------------------------------
+
+SELECT
+CEIL("Sales")
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 112
+-- Floor
+---------------------------------------------------------
+
+SELECT
+FLOOR("Sales")
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 113
+-- Absolute Profit
+---------------------------------------------------------
+
+SELECT
+ABS("Profit")
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 114
+-- Square Root
+---------------------------------------------------------
+
+SELECT
+SQRT("Sales")
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 115
+-- Power Function
+---------------------------------------------------------
+
+SELECT
+POWER("Quantity",2)
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 116
+-- Modulus
+---------------------------------------------------------
+
+SELECT
+MOD("Quantity",2)
+FROM sales
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 117
+-- Random Number
+---------------------------------------------------------
+
+SELECT RANDOM();
+
+---------------------------------------------------------
+-- Query 118
+-- Highest Rounded Sales
+---------------------------------------------------------
+
+SELECT
+ROUND(MAX("Sales"),2)
+FROM sales;
+
+---------------------------------------------------------
+-- Query 119
+-- Average Rounded Profit
+---------------------------------------------------------
+
+SELECT
+ROUND(AVG("Profit"),2)
+FROM sales;
+
+---------------------------------------------------------
+-- Query 120
+-- Profit Percentage
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+
+ROUND(
+
+("Profit"/NULLIF("Sales",0))*100
+
+,2)
+
+AS Profit_Percentage
+
+FROM sales
+
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 121
+-- Product Name Length
+---------------------------------------------------------
+
+SELECT
+
+"Product Name",
+
+LENGTH("Product Name")
+
+FROM sales
+
+ORDER BY 2 DESC
+
+LIMIT 10;
+
+---------------------------------------------------------
+-- Query 122
+-- Customer Name Length
+---------------------------------------------------------
+
+SELECT
+
+"Customer Name",
+
+LENGTH("Customer Name")
+
+FROM sales
+
+ORDER BY 2 DESC
+
+LIMIT 10;
+
+---------------------------------------------------------
+-- Query 123
+-- Upper State
+---------------------------------------------------------
+
+SELECT
+
+UPPER("State")
+
+FROM sales
+
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 124
+-- Lower City
+---------------------------------------------------------
+
+SELECT
+
+LOWER("City")
+
+FROM sales
+
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 125
+-- Rounded Average Sales by Category
+---------------------------------------------------------
+
+SELECT
+
+"Category",
+
+ROUND(AVG("Sales"),2)
+
+FROM sales
+
+GROUP BY "Category";
+
+---------------------------------------------------------
+-- Query 126
+-- Rounded Profit by Region
+---------------------------------------------------------
+
+SELECT
+
+"Region",
+
+ROUND(SUM("Profit"),2)
+
+FROM sales
+
+GROUP BY "Region";
+
+---------------------------------------------------------
+-- Query 127
+-- Quarter-wise Sales
+---------------------------------------------------------
+
+SELECT
+
+EXTRACT(QUARTER FROM "Order Date") AS Quarter,
+
+SUM("Sales")
+
+FROM sales
+
+GROUP BY Quarter
+
+ORDER BY Quarter;
+
+---------------------------------------------------------
+-- Query 128
+-- Month-wise Orders
+---------------------------------------------------------
+
+SELECT
+
+EXTRACT(MONTH FROM "Order Date") AS Month,
+
+COUNT(*)
+
+FROM sales
+
+GROUP BY Month
+
+ORDER BY Month;
+
+---------------------------------------------------------
+-- Query 129
+-- Year-wise Sales
+---------------------------------------------------------
+
+SELECT
+
+EXTRACT(YEAR FROM "Order Date") AS Year,
+
+SUM("Sales")
+
+FROM sales
+
+GROUP BY Year
+
+ORDER BY Year;
+
+---------------------------------------------------------
+-- Query 130
+-- Executive Summary
+---------------------------------------------------------
+
+SELECT
+
+COUNT(*) AS Orders,
+
+COUNT(DISTINCT "Customer ID") AS Customers,
+
+COUNT(DISTINCT "Product ID") AS Products,
+
+ROUND(SUM("Sales"),2) AS Revenue,
+
+ROUND(SUM("Profit"),2) AS Profit,
+
+ROUND(AVG("Shipping Days"),2) AS Avg_Shipping_Days
+
+FROM sales;
