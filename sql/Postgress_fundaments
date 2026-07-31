@@ -695,3 +695,612 @@ ROUND(AVG("Profit"),2) AS Average_Profit
 FROM sales;
 
 
+/*
+=========================================================
+PART 3 : CASE WHEN & BUSINESS LOGIC
+Queries : 61 - 90
+=========================================================
+*/
+
+---------------------------------------------------------
+-- Query 61
+-- Sales Category
+---------------------------------------------------------
+
+SELECT
+"Order ID",
+"Sales",
+
+CASE
+WHEN "Sales"<100 THEN 'Low'
+WHEN "Sales"<=500 THEN 'Medium'
+ELSE 'High'
+END AS Sales_Category
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 62
+-- Profit Status
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+"Profit",
+
+CASE
+
+WHEN "Profit"<0 THEN 'Loss'
+WHEN "Profit"=0 THEN 'Break Even'
+ELSE 'Profit'
+
+END AS Profit_Status
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 63
+-- Shipping Performance
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+"Shipping Days",
+
+CASE
+
+WHEN "Shipping Days"<=2 THEN 'Fast'
+
+WHEN "Shipping Days"<=5 THEN 'Normal'
+
+ELSE 'Delayed'
+
+END AS Delivery_Status
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 64
+-- Discount Category
+---------------------------------------------------------
+
+SELECT
+
+"Discount",
+
+CASE
+
+WHEN "Discount"=0 THEN 'No Discount'
+
+WHEN "Discount"<=0.20 THEN 'Low'
+
+WHEN "Discount"<=0.50 THEN 'Medium'
+
+ELSE 'Heavy'
+
+END AS Discount_Type
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 65
+-- Quantity Category
+---------------------------------------------------------
+
+SELECT
+
+"Quantity",
+
+CASE
+
+WHEN "Quantity"=1 THEN 'Single'
+
+WHEN "Quantity"<=4 THEN 'Small'
+
+ELSE 'Bulk'
+
+END
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 66
+-- Customer Classification
+---------------------------------------------------------
+
+SELECT
+
+"Customer Name",
+
+SUM("Sales") AS Total_Sales,
+
+CASE
+
+WHEN SUM("Sales")>10000 THEN 'Premium'
+
+WHEN SUM("Sales")>5000 THEN 'Gold'
+
+ELSE 'Regular'
+
+END AS Customer_Level
+
+FROM sales
+
+GROUP BY "Customer Name";
+
+---------------------------------------------------------
+-- Query 67
+-- Product Performance
+---------------------------------------------------------
+
+SELECT
+
+"Product Name",
+
+SUM("Profit") AS Profit,
+
+CASE
+
+WHEN SUM("Profit")>1000 THEN 'Excellent'
+
+WHEN SUM("Profit")>0 THEN 'Profitable'
+
+ELSE 'Loss Product'
+
+END
+
+FROM sales
+
+GROUP BY "Product Name";
+
+---------------------------------------------------------
+-- Query 68
+-- Region Performance
+---------------------------------------------------------
+
+SELECT
+
+"Region",
+
+SUM("Sales") AS Sales,
+
+CASE
+
+WHEN SUM("Sales")>700000 THEN 'Top'
+
+WHEN SUM("Sales")>400000 THEN 'Growing'
+
+ELSE 'Average'
+
+END
+
+FROM sales
+
+GROUP BY "Region";
+
+---------------------------------------------------------
+-- Query 69
+-- Weekend Orders
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+
+"Order Day",
+
+CASE
+
+WHEN "Order Day" IN ('Saturday','Sunday')
+
+THEN 'Weekend'
+
+ELSE 'Weekday'
+
+END
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 70
+-- High Discount Alert
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+
+"Discount",
+
+"Profit",
+
+CASE
+
+WHEN "Discount">0.3
+AND "Profit"<0
+
+THEN 'Loss due to Discount'
+
+ELSE 'Normal'
+
+END
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 71
+-- Count Loss Orders
+---------------------------------------------------------
+
+SELECT
+
+SUM(
+
+CASE
+
+WHEN "Profit"<0 THEN 1
+
+ELSE 0
+
+END
+
+) AS Loss_Orders
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 72
+-- Count Profitable Orders
+---------------------------------------------------------
+
+SELECT
+
+SUM(
+
+CASE
+
+WHEN "Profit">0 THEN 1
+
+ELSE 0
+
+END
+
+) AS Profit_Orders
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 73
+-- Count High Value Orders
+---------------------------------------------------------
+
+SELECT
+
+SUM(
+
+CASE
+
+WHEN "Sales">1000 THEN 1
+
+ELSE 0
+
+END
+
+)
+
+AS High_Value_Orders
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 74
+-- Total High Value Sales
+---------------------------------------------------------
+
+SELECT
+
+SUM(
+
+CASE
+
+WHEN "Sales">1000
+
+THEN "Sales"
+
+ELSE 0
+
+END
+
+)
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 75
+-- Profit Percentage
+---------------------------------------------------------
+
+SELECT
+
+"Order ID",
+
+ROUND(
+
+("Profit"/NULLIF("Sales",0))*100
+
+,2)
+
+AS Profit_Percentage
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 76
+-- COALESCE Example
+---------------------------------------------------------
+
+SELECT
+
+COALESCE(
+
+NULL,
+
+'Retail Dashboard'
+
+);
+
+---------------------------------------------------------
+-- Query 77
+-- CAST Example
+---------------------------------------------------------
+
+SELECT
+
+CAST("Sales" AS INTEGER)
+
+FROM sales
+
+LIMIT 20;
+
+---------------------------------------------------------
+-- Query 78
+-- ROUND Example
+---------------------------------------------------------
+
+SELECT
+
+ROUND(
+
+AVG("Sales"),
+
+2
+
+)
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 79
+-- Dashboard KPI
+---------------------------------------------------------
+
+SELECT
+
+COUNT(*) AS Orders,
+
+SUM("Sales") AS Sales,
+
+SUM("Profit") AS Profit,
+
+ROUND(
+
+SUM("Profit")/
+SUM("Sales")*100
+
+,2)
+
+AS Profit_Margin
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 80
+-- Business Recommendation
+---------------------------------------------------------
+
+SELECT
+
+"Sub-Category",
+
+SUM("Sales") AS Sales,
+
+SUM("Profit") AS Profit,
+
+CASE
+
+WHEN SUM("Sales")>50000
+AND SUM("Profit")<0
+
+THEN 'Improve Margin'
+
+WHEN SUM("Sales")<10000
+
+THEN 'Increase Marketing'
+
+ELSE 'Maintain'
+
+END
+
+AS Recommendation
+
+FROM sales
+
+GROUP BY "Sub-Category";
+
+---------------------------------------------------------
+-- Query 81
+-- Orders per Year
+---------------------------------------------------------
+
+SELECT
+
+"Order Year",
+
+COUNT(*)
+
+FROM sales
+
+GROUP BY "Order Year";
+
+---------------------------------------------------------
+-- Query 82
+-- Sales per Quarter
+---------------------------------------------------------
+
+SELECT
+
+"Order Quarter",
+
+SUM("Sales")
+
+FROM sales
+
+GROUP BY "Order Quarter";
+
+---------------------------------------------------------
+-- Query 83
+-- Average Shipping Days
+---------------------------------------------------------
+
+SELECT
+
+AVG("Shipping Days")
+
+FROM sales;
+
+---------------------------------------------------------
+-- Query 84
+-- Most Expensive Order
+---------------------------------------------------------
+
+SELECT *
+
+FROM sales
+
+ORDER BY "Sales" DESC
+
+LIMIT 1;
+
+---------------------------------------------------------
+-- Query 85
+-- Biggest Loss Order
+---------------------------------------------------------
+
+SELECT *
+
+FROM sales
+
+ORDER BY "Profit"
+
+LIMIT 1;
+
+---------------------------------------------------------
+-- Query 86
+-- Top 10 Customers
+---------------------------------------------------------
+
+SELECT
+
+"Customer Name",
+
+SUM("Sales") AS Sales
+
+FROM sales
+
+GROUP BY "Customer Name"
+
+ORDER BY Sales DESC
+
+LIMIT 10;
+
+---------------------------------------------------------
+-- Query 87
+-- Top 10 Products
+---------------------------------------------------------
+
+SELECT
+
+"Product Name",
+
+SUM("Sales") AS Sales
+
+FROM sales
+
+GROUP BY "Product Name"
+
+ORDER BY Sales DESC
+
+LIMIT 10;
+
+---------------------------------------------------------
+-- Query 88
+-- Top Cities
+---------------------------------------------------------
+
+SELECT
+
+"City",
+
+SUM("Sales") AS Sales
+
+FROM sales
+
+GROUP BY "City"
+
+ORDER BY Sales DESC
+
+LIMIT 10;
+
+---------------------------------------------------------
+-- Query 89
+-- Bottom Cities
+---------------------------------------------------------
+
+SELECT
+
+"City",
+
+SUM("Profit") AS Profit
+
+FROM sales
+
+GROUP BY "City"
+
+ORDER BY Profit ASC
+
+LIMIT 10;
+
+---------------------------------------------------------
+-- Query 90
+-- Executive Dashboard
+---------------------------------------------------------
+
+SELECT
+
+COUNT(*) AS Orders,
+
+COUNT(DISTINCT "Customer ID") AS Customers,
+
+SUM("Sales") AS Revenue,
+
+SUM("Profit") AS Profit,
+
+ROUND(AVG("Sales"),2) AS Avg_Order,
+
+MAX("Sales") AS Max_Order,
+
+MIN("Sales") AS Min_Order
+
+FROM sales;
